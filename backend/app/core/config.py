@@ -1,0 +1,54 @@
+import os
+from typing import List
+from pydantic_settings import BaseSettings
+from pydantic import model_validator
+
+class Settings(BaseSettings):
+    PROJECT_NAME: str = "DeepShield AI"
+    API_V1_STR: str = "/api/v1"
+    SECRET_KEY: str = "supersecretkeyforjwttokensigningdeepshieldai12345!"
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24 * 7  # 7 days
+
+    # Database
+    POSTGRES_USER: str = "postgres"
+    POSTGRES_PASSWORD: str = "postgres"
+    POSTGRES_SERVER: str = "localhost"
+    POSTGRES_PORT: str = "5432"
+    POSTGRES_DB: str = "deepshield"
+
+    # Redis / Celery
+    REDIS_HOST: str = "localhost"
+    REDIS_PORT: str = "6379"
+
+    # CORS
+    BACKEND_CORS_ORIGINS: List[str] = [
+        "http://localhost:5173",
+        "http://localhost:3000",
+        "http://127.0.0.1:5173",
+        "http://127.0.0.1:3000",
+    ]
+
+    # Computed at runtime (not pydantic fields)
+    DATABASE_URL: str = ""
+    REDIS_URL: str = ""
+    UPLOAD_DIR: str = ""
+
+    @model_validator(mode="after")
+    def compute_urls(self):
+        self.DATABASE_URL = (
+            f"postgresql://{self.POSTGRES_USER}:{self.POSTGRES_PASSWORD}"
+            f"@{self.POSTGRES_SERVER}:{self.POSTGRES_PORT}/{self.POSTGRES_DB}"
+        )
+        self.REDIS_URL = f"redis://{self.REDIS_HOST}:{self.REDIS_PORT}/0"
+        self.UPLOAD_DIR = os.path.join(
+            os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))),
+            "uploads"
+        )
+        return self
+
+    model_config = {"case_sensitive": True, "env_file": ".env", "extra": "ignore"}
+
+settings = Settings()
+
+# Ensure uploads directory exists
+os.makedirs(settings.UPLOAD_DIR, exist_ok=True)

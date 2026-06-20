@@ -1,0 +1,70 @@
+version: "3.8"
+
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: deepshield_db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: deepshield
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: always
+
+  redis:
+    image: redis:7-alpine
+    container_name: deepshield_redis
+    ports:
+      - "6379:6379"
+    restart: always
+
+  backend:
+    build: ./backend
+    container_name: deepshield_backend
+    environment:
+      - POSTGRES_SERVER=db
+      - REDIS_HOST=redis
+      - SECRET_KEY=supersecretkeyforjwttokensigningdeepshieldai12345!
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/workspace
+      - uploads_data:/workspace/uploads
+    depends_on:
+      - db
+      - redis
+    restart: always
+
+  worker:
+    build: ./backend
+    container_name: deepshield_worker
+    command: celery -A app.core.cel.celery_app worker --loglevel=info
+    environment:
+      - POSTGRES_SERVER=db
+      - REDIS_HOST=redis
+    volumes:
+      - ./backend:/workspace
+      - uploads_data:/workspace/uploads
+    depends_on:
+      - db
+      - redis
+    restart: always
+
+  frontend:
+    build: ./frontend
+    container_name: deepshield_frontend
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./frontend:/workspace
+      - /workspace/node_modules
+    depends_on:
+      - backend
+    restart: always
+
+volumes:
+  postgres_data:
+  uploads_data:
