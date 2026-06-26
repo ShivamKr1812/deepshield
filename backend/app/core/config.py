@@ -1,5 +1,5 @@
 import os
-from typing import List
+from typing import List, Union
 from pydantic_settings import BaseSettings
 from pydantic import model_validator
 
@@ -21,7 +21,7 @@ class Settings(BaseSettings):
     REDIS_PORT: str = "6379"
 
     # CORS
-    BACKEND_CORS_ORIGINS: List[str] = [
+    BACKEND_CORS_ORIGINS: Union[List[str], str] = [
         "http://localhost:5173",
         "http://localhost:3000",
         "http://127.0.0.1:5173",
@@ -32,6 +32,15 @@ class Settings(BaseSettings):
     DATABASE_URL: str = ""
     REDIS_URL: str = ""
     UPLOAD_DIR: str = ""
+
+    @model_validator(mode="before")
+    @classmethod
+    def parse_cors_origins(cls, data):
+        if isinstance(data, dict):
+            origins = data.get("BACKEND_CORS_ORIGINS")
+            if isinstance(origins, str) and not origins.strip().startswith("["):
+                data["BACKEND_CORS_ORIGINS"] = [x.strip() for x in origins.split(",") if x.strip()]
+        return data
 
     @model_validator(mode="after")
     def compute_urls(self):
