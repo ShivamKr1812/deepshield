@@ -114,14 +114,15 @@ def upload_media(
     ))
     db.commit()
 
-    # Try Celery; fall back to FastAPI BackgroundTasks
+    # Try Celery if enabled; otherwise fall back to FastAPI BackgroundTasks
     celery_queued = False
-    try:
-        from app.tasks.detection_tasks import process_media_detection
-        process_media_detection.delay(analysis.id)
-        celery_queued = True
-    except Exception:
-        pass
+    if settings.USE_CELERY:
+        try:
+            from app.tasks.detection_tasks import process_media_detection
+            process_media_detection.delay(analysis.id)
+            celery_queued = True
+        except Exception:
+            pass
 
     if not celery_queued:
         background_tasks.add_task(_run_analysis_locally, analysis.id)

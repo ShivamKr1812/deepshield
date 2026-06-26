@@ -21,6 +21,7 @@ class Settings(BaseSettings):
     REDIS_PORT: str = "6379"
     REDIS_PASSWORD: str = ""
     REDIS_URL: str = ""
+    USE_CELERY: bool = False
 
     # CORS
     BACKEND_CORS_ORIGINS: Union[List[str], str] = [
