@@ -46,9 +46,32 @@ app = FastAPI(
 )
 
 # CORS
+origins = []
+if isinstance(settings.BACKEND_CORS_ORIGINS, str):
+    import json
+    try:
+        if settings.BACKEND_CORS_ORIGINS.strip().startswith("["):
+            origins = json.loads(settings.BACKEND_CORS_ORIGINS)
+        else:
+            origins = [x.strip() for x in settings.BACKEND_CORS_ORIGINS.split(",") if x.strip()]
+    except Exception:
+        origins = [x.strip() for x in settings.BACKEND_CORS_ORIGINS.split(",") if x.strip()]
+else:
+    origins = list(settings.BACKEND_CORS_ORIGINS)
+
+allow_origin_regex = None
+# If wildcard is requested, use regex to support credentials safely
+if "*" in origins:
+    origins.remove("*")
+    allow_origin_regex = r"https?://.*"
+else:
+    # Automatically allow Vercel previews and localhost to make developer experience smooth
+    allow_origin_regex = r"https?://(localhost|127\.0\.0\.1)(:\d+)?|https://.*\.vercel\.app"
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=settings.BACKEND_CORS_ORIGINS,
+    allow_origins=origins,
+    allow_origin_regex=allow_origin_regex,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
