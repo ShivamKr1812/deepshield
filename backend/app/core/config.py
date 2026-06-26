@@ -54,6 +54,12 @@ class Settings(BaseSettings):
                 self.REDIS_URL = f"redis://:{self.REDIS_PASSWORD}@{self.REDIS_HOST}:{self.REDIS_PORT}/0"
             else:
                 self.REDIS_URL = f"redis://{self.REDIS_HOST}:{self.REDIS_PORT}/0"
+        
+        # Translate Valkey schemes to Redis schemes (Celery/Redis python packages do not recognize valkey://)
+        if self.REDIS_URL.startswith("valkey://"):
+            self.REDIS_URL = self.REDIS_URL.replace("valkey://", "redis://", 1)
+        elif self.REDIS_URL.startswith("valkeys://"):
+            self.REDIS_URL = self.REDIS_URL.replace("valkeys://", "rediss://", 1)
         self.UPLOAD_DIR = os.path.join(
             os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))),
             "uploads"
