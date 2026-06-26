@@ -1,9 +1,7 @@
 services:
-  # 1. Private Redis service (Runs on Render's Free tier via standard Docker image)
-  - type: pserv
+  # 1. Managed Valkey/Redis instance (Runs on Render's Free tier natively)
+  - type: keyvalue
     name: deepshield-redis
-    env: image
-    image: redis:alpine
     plan: free
 
   # 2. Web Service (FastAPI Backend API)
@@ -37,9 +35,15 @@ services:
           property: database
       # Wire environment to deepshield-redis
       - key: REDIS_HOST
-        value: deepshield-redis
+        fromService:
+          type: keyvalue
+          name: deepshield-redis
+          property: host
       - key: REDIS_PORT
-        value: 6379
+        fromService:
+          type: keyvalue
+          name: deepshield-redis
+          property: port
       # CORS Allowed Origins
       # Set this to your Vercel deployment URL (e.g. https://your-app.vercel.app, http://localhost:5173)
       - key: BACKEND_CORS_ORIGINS
@@ -73,9 +77,15 @@ services:
           property: database
       # Wire environment to deepshield-redis
       - key: REDIS_HOST
-        value: deepshield-redis
+        fromService:
+          type: keyvalue
+          name: deepshield-redis
+          property: host
       - key: REDIS_PORT
-        value: 6379
+        fromService:
+          type: keyvalue
+          name: deepshield-redis
+          property: port
 
 databases:
   # 4. Managed PostgreSQL Database
