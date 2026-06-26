@@ -213,7 +213,7 @@ export const DetectionForm = ({ onAnalysisComplete }) => {
         },
         onUploadProgress: (progressEvent) => {
           const loaded = progressEvent.loaded;
-          const total = progressEvent.total || selectedFile.size;
+          const total = progressEvent.total || file.size;
           const percentCompleted = Math.round((loaded * 100) / total);
 
           setUploadProgress(percentCompleted);
