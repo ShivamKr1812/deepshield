@@ -50,45 +50,7 @@ services:
       - key: BACKEND_CORS_ORIGINS
         value: http://localhost:5173,https://placeholder-url.vercel.app
 
-  # 3. Background Worker (Celery Daemon)
-  - type: worker
-    name: deepshield-worker
-    env: docker
-    plan: free
-    dockerfilePath: backend/Dockerfile
-    dockerContext: backend
-    dockerCommand: celery -A app.core.cel.celery_app worker --loglevel=info
-    envVars:
-      # Wire environment to deepshield-db
-      - key: POSTGRES_SERVER
-        fromDatabase:
-          name: deepshield-db
-          property: host
-      - key: POSTGRES_USER
-        fromDatabase:
-          name: deepshield-db
-          property: user
-      - key: POSTGRES_PASSWORD
-        fromDatabase:
-          name: deepshield-db
-          property: password
-      - key: POSTGRES_DB
-        fromDatabase:
-          name: deepshield-db
-          property: database
-      # Wire environment to deepshield-redis
-      - key: REDIS_HOST
-        fromService:
-          type: keyvalue
-          name: deepshield-redis
-          property: host
-      - key: REDIS_PORT
-        fromService:
-          type: keyvalue
-          name: deepshield-redis
-          property: port
-
 databases:
-  # 4. Managed PostgreSQL Database
+  # 3. Managed PostgreSQL Database
   - name: deepshield-db
     plan: free
