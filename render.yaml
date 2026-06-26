@@ -3,6 +3,7 @@ services:
   - type: keyvalue
     name: deepshield-redis
     plan: free
+    ipAllowList: []
 
   # 2. Web Service (FastAPI Backend API)
   - type: web
