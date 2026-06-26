@@ -66,7 +66,7 @@ if "*" in origins:
     allow_origin_regex = r"https?://.*"
 else:
     # Automatically allow Vercel previews and localhost to make developer experience smooth
-    allow_origin_regex = r"https?://(localhost|127\.0\.0\.1)(:\d+)?|https://.*\.vercel\.app"
+    allow_origin_regex = r"https?://((localhost|127\.0\.0\.1)(:\d+)?|.*\.vercel\.app)"
 
 app.add_middleware(
     CORSMiddleware,
