@@ -5,6 +5,7 @@ celery_app = Celery(
     "deepshield_tasks",
     broker=settings.REDIS_URL,
     backend=settings.REDIS_URL,
+    include=["app.tasks.detection_tasks"],
 )
 
 celery_app.conf.update(

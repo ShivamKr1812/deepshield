@@ -19,6 +19,8 @@ class Settings(BaseSettings):
     # Redis / Celery
     REDIS_HOST: str = "localhost"
     REDIS_PORT: str = "6379"
+    REDIS_PASSWORD: str = ""
+    REDIS_URL: str = ""
 
     # CORS
     BACKEND_CORS_ORIGINS: Union[List[str], str] = [
@@ -30,7 +32,6 @@ class Settings(BaseSettings):
 
     # Computed at runtime (not pydantic fields)
     DATABASE_URL: str = ""
-    REDIS_URL: str = ""
     UPLOAD_DIR: str = ""
 
     @model_validator(mode="before")
@@ -48,7 +49,11 @@ class Settings(BaseSettings):
             f"postgresql://{self.POSTGRES_USER}:{self.POSTGRES_PASSWORD}"
             f"@{self.POSTGRES_SERVER}:{self.POSTGRES_PORT}/{self.POSTGRES_DB}"
         )
-        self.REDIS_URL = f"redis://{self.REDIS_HOST}:{self.REDIS_PORT}/0"
+        if not self.REDIS_URL:
+            if self.REDIS_PASSWORD:
+                self.REDIS_URL = f"redis://:{self.REDIS_PASSWORD}@{self.REDIS_HOST}:{self.REDIS_PORT}/0"
+            else:
+                self.REDIS_URL = f"redis://{self.REDIS_HOST}:{self.REDIS_PORT}/0"
         self.UPLOAD_DIR = os.path.join(
             os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))),
             "uploads"

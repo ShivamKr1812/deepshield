@@ -35,16 +35,11 @@ services:
           name: deepshield-db
           property: database
       # Wire environment to deepshield-redis
-      - key: REDIS_HOST
+      - key: REDIS_URL
         fromService:
           type: keyvalue
           name: deepshield-redis
-          property: host
-      - key: REDIS_PORT
-        fromService:
-          type: keyvalue
-          name: deepshield-redis
-          property: port
+          property: connectionString
       # CORS Allowed Origins
       # Set this to your Vercel deployment URL (e.g. https://your-app.vercel.app, http://localhost:5173)
       - key: BACKEND_CORS_ORIGINS
