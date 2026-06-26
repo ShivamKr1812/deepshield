@@ -4,6 +4,7 @@ import ProtectedRoute from './components/ProtectedRoute';
 import Sidebar from './components/Sidebar';
 
 // Views
+import LandingPage from './views/LandingPage';
 import Login from './views/Login';
 import Register from './views/Register';
 import ForgotPassword from './views/ForgotPassword';
@@ -15,12 +16,13 @@ import Admin from './views/Admin';
 
 const AppContent = () => {
   const location = useLocation();
-  const publicPaths = ['/login', '/register', '/forgot-password'];
+  const publicPaths = ['/', '/login', '/register', '/forgot-password'];
   const isPublic = publicPaths.includes(location.pathname);
 
   if (isPublic) {
     return (
       <Routes>
+        <Route path="/" element={<LandingPage />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
@@ -38,7 +40,7 @@ const AppContent = () => {
       
       <Routes>
         <Route 
-          path="/" 
+          path="/dashboard" 
           element={
             <ProtectedRoute>
               <Dashboard />

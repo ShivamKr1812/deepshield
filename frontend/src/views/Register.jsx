@@ -36,7 +36,7 @@ export const Register = () => {
     setSubmitting(true);
     try {
       await register(email, password, fullName);
-      navigate('/');
+      navigate('/dashboard');
     } catch (err) {
       console.error(err);
       if (!err.response) {

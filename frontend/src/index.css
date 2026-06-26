@@ -539,3 +539,207 @@ h1, h2, h3, h4, h5, h6 {
     display: none !important;
   }
 }
+
+/* ====================================================================
+   DeepDetection Premium File Upload Section Styling
+   ==================================================================== */
+
+.dd-upload-container {
+  background-color: #050505 !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  border-radius: 16px !important;
+  padding: 2.25rem !important;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8) !important;
+}
+
+.dd-upload-zone {
+  background: #080808;
+  border: 2px dashed rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 3rem 1.5rem;
+  text-align: center;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.25rem;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  outline: none;
+}
+
+.dd-upload-zone:focus-visible {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.2);
+}
+
+.dd-upload-zone:hover, .dd-upload-zone.dragover {
+  border-color: var(--primary);
+  background: rgba(79, 70, 229, 0.02);
+}
+
+.dd-upload-zone.has-error {
+  border-color: var(--danger);
+  background: rgba(244, 63, 94, 0.01);
+}
+
+.format-badges-title {
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.badge-flex {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+}
+
+.badge-saas-info {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  color: var(--text-secondary);
+  border-radius: 6px;
+  padding: 4px 10px;
+  font-size: 0.75rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  user-select: none;
+}
+
+.preview-card {
+  background: #090909;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 12px;
+  padding: 1.25rem;
+  display: flex;
+  gap: 1.25rem;
+  align-items: center;
+  margin-top: 1.5rem;
+}
+
+@media (max-width: 520px) {
+  .preview-card {
+    flex-direction: column;
+    align-items: stretch;
+    text-align: center;
+  }
+  .preview-media-wrapper {
+    margin: 0 auto;
+  }
+}
+
+.preview-media-wrapper {
+  width: 96px;
+  height: 96px;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  flex-shrink: 0;
+}
+
+.preview-media-element {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.preview-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+  text-align: left;
+}
+
+.preview-title {
+  font-weight: 600;
+  color: white;
+  font-size: 0.9rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.preview-metadata-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.preview-metadata-item {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+
+.preview-metadata-value {
+  color: var(--text-primary);
+  font-weight: 500;
+  margin-left: 4px;
+}
+
+.progress-details {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  margin-bottom: 8px;
+  width: 100%;
+}
+
+.progress-status {
+  font-weight: 600;
+  color: white;
+}
+
+.progress-stats-group {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.btn-cancel-upload {
+  font-size: 0.75rem;
+  background: rgba(239, 68, 68, 0.08);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  color: var(--danger);
+  padding: 4px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.15s;
+  font-weight: 600;
+}
+
+.btn-cancel-upload:hover {
+  background: rgba(239, 68, 68, 0.15);
+  border-color: rgba(239, 68, 68, 0.4);
+}
+
+.btn-browse {
+  background: transparent;
+  border: none;
+  color: var(--primary);
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  padding: 0;
+  text-decoration: underline;
+  display: inline;
+}
+
+.btn-browse:hover {
+  color: #818cf8;
+}
+

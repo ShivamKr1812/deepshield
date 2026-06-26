@@ -24,7 +24,7 @@ export const Login = () => {
     setSubmitting(true);
     try {
       await login(email, password);
-      navigate('/');
+      navigate('/dashboard');
     } catch (err) {
       console.error(err);
       if (!err.response) {
